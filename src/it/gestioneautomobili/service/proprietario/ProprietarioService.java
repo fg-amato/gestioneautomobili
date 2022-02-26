@@ -6,7 +6,7 @@ import it.gestioneautomobili.dao.proprietario.ProprietarioDAO;
 import it.gestioneautomobili.model.Proprietario;
 
 public interface ProprietarioService {
-	public List<Proprietario> listAllAutomobili() throws Exception;
+	public List<Proprietario> listAllProprietari() throws Exception;
 
 	public Proprietario caricaSingoloProprietario(Long id) throws Exception;
 

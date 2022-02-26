@@ -11,7 +11,7 @@ public class AutomobileDAOImpl implements AutomobileDAO {
 
 	@Override
 	public List<Automobile> list() throws Exception {
-		return entityManager.createQuery("from automobile", Automobile.class).getResultList();
+		return entityManager.createQuery("from Automobile", Automobile.class).getResultList();
 	}
 
 	@Override

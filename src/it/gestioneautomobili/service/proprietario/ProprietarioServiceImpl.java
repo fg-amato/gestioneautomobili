@@ -13,7 +13,7 @@ public class ProprietarioServiceImpl implements ProprietarioService {
 	private ProprietarioDAO proprietarioDAO;
 
 	@Override
-	public List<Proprietario> listAllAutomobili() throws Exception {
+	public List<Proprietario> listAllProprietari() throws Exception {
 		EntityManager entityManager = EntityManagerUtil.getEntityManager();
 
 		try {
