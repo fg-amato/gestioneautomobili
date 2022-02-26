@@ -22,25 +22,33 @@ public class TestGestioneAutomobili {
 		try {
 
 			// ora con il service posso fare tutte le invocazioni che mi servono
-			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-					+ " elementi.");
+//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+//					+ " elementi.");
+//
+//			testInserisciProprietario(proprietarioService);
+//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+//					+ " elementi.");
+//
+//			testRimozioneProprietario(proprietarioService);
+//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+//					+ " elementi.");
+//
+//			testUpdateProprietario(proprietarioService);
+//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+//					+ " elementi.");
 
-			testInserisciProprietario(proprietarioService);
-			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-					+ " elementi.");
-
-			testRimozioneProprietario(proprietarioService);
-			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-					+ " elementi.");
-
+//			System.out.println(
+//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+//
+//			testInserisciAutomobile(proprietarioService, automobileService);
+//			System.out.println(
+//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+//
+//			testRimozioneAutomobile(proprietarioService, automobileService);
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
-			testInserisciAutomobile(proprietarioService, automobileService);
-			System.out.println(
-					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
-
-			testRimozioneAutomobile(proprietarioService, automobileService);
+			testUpdateAutomobile(proprietarioService, automobileService);
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
@@ -102,7 +110,7 @@ public class TestGestioneAutomobili {
 		System.out.println(".......testRimozioneAutomobile inizio.............");
 
 		// inserisco un abitante che rimuoverò
-		// creo nuovo abitante ma prima mi serve un proprietario
+		// creo nuovo automobile ma prima mi serve un proprietario
 		List<Proprietario> listaProprietariPresenti = proprietarioService.listAllProprietari();
 		if (listaProprietariPresenti.isEmpty())
 			throw new RuntimeException("testRimozioneAutomobile FALLITO: non ci sono proprietari a cui collegarci ");
@@ -145,5 +153,77 @@ public class TestGestioneAutomobili {
 			throw new RuntimeException("testRimozioneProprietario FALLITO: record non cancellato ");
 
 		System.out.println(".......testRimozioneProprietario fine: PASSED.............");
+	}
+
+	private static void testUpdateProprietario(ProprietarioService proprietarioService) throws Exception {
+		System.out.println(".......testUpdateProprietario inizio.............");
+		// creo nuovo proprietario
+		Date dataDiNascitaProprietarioMarioRossi = new SimpleDateFormat("dd-MM-yyyy").parse("24-01-1990");
+		Proprietario nuovoProprietarioMarioRossi = new Proprietario("Mario", "Rossi", "RSSMRI90FIS",
+				dataDiNascitaProprietarioMarioRossi);
+		if (nuovoProprietarioMarioRossi.getId() != null)
+			throw new RuntimeException("testUpdateProprietario FALLITO: record già presente ");
+
+		// salvo
+		proprietarioService.inserisciNuovo(nuovoProprietarioMarioRossi);
+
+		if (nuovoProprietarioMarioRossi.getId() == null)
+			throw new RuntimeException("testUpdateProprietario FALLITO ");
+
+		nuovoProprietarioMarioRossi.setNome("Paolo");
+		nuovoProprietarioMarioRossi.setCognome("Bianchi");
+		nuovoProprietarioMarioRossi.setCodiceFiscale("BNCPLO90FIS");
+
+		Long idProprietarioDaAggiornare = nuovoProprietarioMarioRossi.getId();
+
+		proprietarioService.aggiorna(nuovoProprietarioMarioRossi);
+
+		Proprietario proprietarioModificato = proprietarioService.caricaSingoloProprietario(idProprietarioDaAggiornare);
+
+		if (!nuovoProprietarioMarioRossi.equals(proprietarioModificato)) {
+			throw new RuntimeException("testUpdateProprietario FALLITO: record non aggiornato");
+		}
+		System.out.println(".......testUpdateProprietario fine: PASSED.............");
+	}
+
+	private static void testUpdateAutomobile(ProprietarioService proprietarioService,
+			AutomobileService automobileService) throws Exception {
+		System.out.println(".......testUpdateAutomobile inizio.............");
+
+		// inserisco un automobile che rimuoverò
+		// creo nuovo automobile ma prima mi serve un proprietario
+		List<Proprietario> listaProprietariPresenti = proprietarioService.listAllProprietari();
+		if (listaProprietariPresenti.isEmpty())
+			throw new RuntimeException("testUpdateAutomobile FALLITO: non ci sono proprietari a cui collegarci ");
+
+		Automobile automobileDaAggiornare = new Automobile("Audi", "A3", "MM789NN", 2015);
+		// lo lego al primo proprietario che trovo
+		automobileDaAggiornare.setProprietario(listaProprietariPresenti.get(0));
+
+		automobileService.inserisciNuovo(automobileDaAggiornare);
+
+		if (automobileDaAggiornare.getId() == null)
+			throw new RuntimeException("testUpdateAutomobile FALLITO ");
+
+		// aggiorno i campi dopo l'inserimento
+		if (listaProprietariPresenti.size() > 1) {
+			automobileDaAggiornare.setProprietario(listaProprietariPresenti.get(listaProprietariPresenti.size() - 1));
+		}
+
+		automobileDaAggiornare.setAnnoDiImmatricolazione(2012);
+		automobileDaAggiornare.setMarca("BMW");
+		automobileDaAggiornare.setModello("X3");
+
+		automobileService.aggiorna(automobileDaAggiornare);
+
+		Long idAutomobileDaAggiornare = automobileDaAggiornare.getId();
+
+		Automobile automobileAggiornata = automobileService.caricaSingoloAutomobile(idAutomobileDaAggiornare);
+
+		if (!automobileAggiornata.equals(automobileDaAggiornare)) {
+			throw new RuntimeException("testUpdateAutomobile FALLITO: record non aggiornato");
+		}
+
+		System.out.println(".......testUpdateAutomobile fine: PASSED.............");
 	}
 }

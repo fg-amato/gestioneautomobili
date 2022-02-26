@@ -1,5 +1,7 @@
 package it.gestioneautomobili.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +28,7 @@ public class Automobile {
 	private String targa;
 	@Column(name = "annoimmatricolazione")
 	private int annoDiImmatricolazione;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "proprietario_id")
 	private Proprietario proprietario;
 
@@ -104,6 +106,24 @@ public class Automobile {
 	public String toString() {
 		return "Automobile [id=" + id + ", marca=" + marca + ", modello=" + modello + ", targa=" + targa
 				+ ", annoDiImmatricolazione=" + annoDiImmatricolazione + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(annoDiImmatricolazione, id, marca, modello, proprietario, targa);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Automobile))
+			return false;
+
+		Automobile other = (Automobile) obj;
+		return this.annoDiImmatricolazione == other.getAnnoDiImmatricolazione() && this.id.equals(other.getId())
+				&& this.marca.equals(other.getMarca()) && this.modello.equals(other.getModello())
+				&& this.proprietario.equals(other.getProprietario()) && this.targa.equals(other.getTarga());
 	}
 
 }

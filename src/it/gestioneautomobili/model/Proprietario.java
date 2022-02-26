@@ -2,6 +2,7 @@ package it.gestioneautomobili.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -110,6 +111,23 @@ public class Proprietario {
 
 	public boolean addToAutomobili(Automobile automobileDaAggiungere) {
 		return automobili.add(automobileDaAggiungere);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(codiceFiscale, cognome, dataDiNascita, id, nome);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Proprietario))
+			return false;
+		Proprietario other = (Proprietario) obj;
+		return this.codiceFiscale.equals(other.getCodiceFiscale()) && this.cognome.equals(other.getCognome())
+				&& this.dataDiNascita.equals(other.getDataDiNascita()) && this.id.equals(other.getId())
+				&& this.nome.equals(other.getNome());
 	}
 
 }
