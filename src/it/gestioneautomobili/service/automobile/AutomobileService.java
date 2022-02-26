@@ -16,6 +16,10 @@ public interface AutomobileService {
 
 	public void rimuovi(Automobile automobileInstance) throws Exception;
 
+	public int countProprietariConAutomobiliImmatricolateDopoLAnno(int annoDiImmatricolazioneInput) throws Exception;
+
+	public List<Automobile> listAllAutomobiliConCodFisProprietarioCheIniziaPer(String input) throws Exception;
+
 	// per injection
 	public void setAutomobileDAO(AutomobileDAO automobileDAO);
 }

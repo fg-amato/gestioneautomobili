@@ -126,4 +126,40 @@ public class AutomobileServiceImpl implements AutomobileService {
 		this.automobileDAO = automobileDAO;
 	}
 
+	@Override
+	public int countProprietariConAutomobiliImmatricolateDopoLAnno(int annoDiImmatricolazioneInput) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			automobileDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return automobileDAO.countProprietariConAutomobileImmatricolataDopo(annoDiImmatricolazioneInput);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
+	@Override
+	public List<Automobile> listAllAutomobiliConCodFisProprietarioCheIniziaPer(String input) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			automobileDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return automobileDAO.findAllByCodFisProprietarioStartsWith(input);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
 }

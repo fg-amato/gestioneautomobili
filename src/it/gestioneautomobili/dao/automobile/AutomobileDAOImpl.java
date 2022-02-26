@@ -3,6 +3,7 @@ package it.gestioneautomobili.dao.automobile;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import it.gestioneautomobili.model.Automobile;
 
@@ -50,6 +51,22 @@ public class AutomobileDAOImpl implements AutomobileDAO {
 	@Override
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	@Override
+	public int countProprietariConAutomobileImmatricolataDopo(int annoDiImmatricolazioneInput) {
+//		TypedQuery<Automobile> query = entityManager.createQuery(
+//				"select count(a.proprietario.id), a from Automobile a where a.annoImmatricolazione > ?1",
+//				Automobile.class);
+//		return query.setParameter(1, annoDiImmatricolazioneInput).getResultList();
+		return -1;
+	}
+
+	@Override
+	public List<Automobile> findAllByCodFisProprietarioStartsWith(String inizialiInput) {
+		TypedQuery<Automobile> query = entityManager
+				.createQuery("from Automobile a where a.proprietario.codiceFiscale like ?1", Automobile.class);
+		return query.setParameter(1, inizialiInput + "%").getResultList();
 	}
 
 }

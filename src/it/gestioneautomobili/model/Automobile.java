@@ -27,7 +27,7 @@ public class Automobile {
 	@Column(name = "targa")
 	private String targa;
 	@Column(name = "annoimmatricolazione")
-	private int annoDiImmatricolazione;
+	private int annoImmatricolazione;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "proprietario_id")
 	private Proprietario proprietario;
@@ -36,21 +36,21 @@ public class Automobile {
 		super();
 	}
 
-	public Automobile(String marca, String modello, String targa, int annoDiImmatricolazione) {
+	public Automobile(String marca, String modello, String targa, int annoImmatricolazione) {
 		super();
 		this.marca = marca;
 		this.modello = modello;
 		this.targa = targa;
-		this.annoDiImmatricolazione = annoDiImmatricolazione;
+		this.annoImmatricolazione = annoImmatricolazione;
 	}
 
-	public Automobile(String marca, String modello, String targa, int annoDiImmatricolazione,
+	public Automobile(String marca, String modello, String targa, int annoImmatricolazione,
 			Proprietario proprietario) {
 		super();
 		this.marca = marca;
 		this.modello = modello;
 		this.targa = targa;
-		this.annoDiImmatricolazione = annoDiImmatricolazione;
+		this.annoImmatricolazione = annoImmatricolazione;
 		this.proprietario = proprietario;
 	}
 
@@ -87,11 +87,11 @@ public class Automobile {
 	}
 
 	public int getAnnoDiImmatricolazione() {
-		return annoDiImmatricolazione;
+		return annoImmatricolazione;
 	}
 
-	public void setAnnoDiImmatricolazione(int annoDiImmatricolazione) {
-		this.annoDiImmatricolazione = annoDiImmatricolazione;
+	public void setAnnoDiImmatricolazione(int annoImmatricolazione) {
+		this.annoImmatricolazione = annoImmatricolazione;
 	}
 
 	public Proprietario getProprietario() {
@@ -105,12 +105,12 @@ public class Automobile {
 	@Override
 	public String toString() {
 		return "Automobile [id=" + id + ", marca=" + marca + ", modello=" + modello + ", targa=" + targa
-				+ ", annoDiImmatricolazione=" + annoDiImmatricolazione + "]";
+				+ ", annoImmatricolazione=" + annoImmatricolazione + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(annoDiImmatricolazione, id, marca, modello, proprietario, targa);
+		return Objects.hash(annoImmatricolazione, id, marca, modello, proprietario, targa);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class Automobile {
 			return false;
 
 		Automobile other = (Automobile) obj;
-		return this.annoDiImmatricolazione == other.getAnnoDiImmatricolazione() && this.id.equals(other.getId())
+		return this.annoImmatricolazione == other.getAnnoDiImmatricolazione() && this.id.equals(other.getId())
 				&& this.marca.equals(other.getMarca()) && this.modello.equals(other.getModello())
 				&& this.proprietario.equals(other.getProprietario()) && this.targa.equals(other.getTarga());
 	}

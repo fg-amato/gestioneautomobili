@@ -45,13 +45,26 @@ public class TestGestioneAutomobili {
 //					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 //
 //			testRimozioneAutomobile(proprietarioService, automobileService);
+//			System.out.println(
+//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+//
+//			testUpdateAutomobile(proprietarioService, automobileService);
+//			System.out.println(
+//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
-			testUpdateAutomobile(proprietarioService, automobileService);
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
+
+			testFindAllProprietariCodFisIniziaPer(proprietarioService, automobileService);
+
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
@@ -225,5 +238,195 @@ public class TestGestioneAutomobili {
 		}
 
 		System.out.println(".......testUpdateAutomobile fine: PASSED.............");
+	}
+
+	private static void testCountProprietariWithAutomobileImmatricolataDopo(ProprietarioService proprietarioService,
+			AutomobileService automobileService) throws Exception {
+		System.out.println(".......testCountProprietariWithAutomobileImmatricolataDopo inizio.............");
+
+		// istanzio 3 proprietari
+		Date dataDiNascitaProprietarioPeppeVerdi = new SimpleDateFormat("dd-MM-yyyy").parse("02-10-1995");
+		Proprietario nuovoProprietarioPeppeVerdi = new Proprietario("Peppe", "Verdi", "VRDPPP95FIS",
+				dataDiNascitaProprietarioPeppeVerdi);
+
+		Date dataDiNascitaProprietarioMimmoMammi = new SimpleDateFormat("dd-MM-yyyy").parse("15-05-1993");
+		Proprietario nuovoProprietarioMimmoMammi = new Proprietario("Mimmo", "Mammi", "MMMMMM93FIS",
+				dataDiNascitaProprietarioMimmoMammi);
+
+		Date dataDiNascitaProprietarioLucaGialli = new SimpleDateFormat("dd-MM-yyyy").parse("30-11-1979");
+		Proprietario nuovoProprietarioLucaGialli = new Proprietario("Luca", "Gialli", "LCAGLL79FIS",
+				dataDiNascitaProprietarioLucaGialli);
+
+		proprietarioService.inserisciNuovo(nuovoProprietarioPeppeVerdi);
+		proprietarioService.inserisciNuovo(nuovoProprietarioMimmoMammi);
+		proprietarioService.inserisciNuovo(nuovoProprietarioLucaGialli);
+
+		if (nuovoProprietarioLucaGialli.getId() == null || nuovoProprietarioMimmoMammi.getId() == null
+				|| nuovoProprietarioPeppeVerdi.getId() == null) {
+			throw new RuntimeException(
+					"testCountProprietariWithAutomobileImmatricolataDopo FALLITO: record già presente ");
+		}
+
+		Automobile primaAutomobileLucaGialli = new Automobile("Fiat", "Idea", "KM123MK", 2021);
+		Automobile secondaAutomobileLucaGialli = new Automobile("Fiat", "500X", "LG444GL", 2022);
+
+		primaAutomobileLucaGialli.setProprietario(nuovoProprietarioLucaGialli);
+		secondaAutomobileLucaGialli.setProprietario(nuovoProprietarioLucaGialli);
+
+		automobileService.inserisciNuovo(primaAutomobileLucaGialli);
+		automobileService.inserisciNuovo(secondaAutomobileLucaGialli);
+
+		if (primaAutomobileLucaGialli.getId() == null || secondaAutomobileLucaGialli.getId() == null)
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO ");
+
+		Automobile primaAutomobileMimmoMammi = new Automobile("Fiat", "Idea", "KM123MK", 2010);
+		Automobile secondaAutomobileMimmoMammi = new Automobile("Fiat", "500X", "LG444GL", 2012);
+
+		primaAutomobileMimmoMammi.setProprietario(nuovoProprietarioMimmoMammi);
+		secondaAutomobileMimmoMammi.setProprietario(nuovoProprietarioMimmoMammi);
+
+		automobileService.inserisciNuovo(primaAutomobileMimmoMammi);
+		automobileService.inserisciNuovo(secondaAutomobileMimmoMammi);
+
+		if (primaAutomobileMimmoMammi.getId() == null || secondaAutomobileMimmoMammi.getId() == null)
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO ");
+
+		Automobile primaAutomobilePeppeVerdi = new Automobile("Fiat", "Idea", "KM123MK", 2025);
+		Automobile secondaAutomobilePeppeVerdi = new Automobile("Fiat", "500X", "LG444GL", 2026);
+
+		primaAutomobilePeppeVerdi.setProprietario(nuovoProprietarioPeppeVerdi);
+		secondaAutomobilePeppeVerdi.setProprietario(nuovoProprietarioPeppeVerdi);
+
+		automobileService.inserisciNuovo(primaAutomobilePeppeVerdi);
+		automobileService.inserisciNuovo(secondaAutomobilePeppeVerdi);
+
+		if (primaAutomobilePeppeVerdi.getId() == null || secondaAutomobilePeppeVerdi.getId() == null)
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO ");
+
+		int numeroDiProprietariConAutoImmatricolateDopoIl2020 = automobileService
+				.countProprietariConAutomobiliImmatricolateDopoLAnno(2020);
+
+		if (numeroDiProprietariConAutoImmatricolateDopoIl2020 != 2) {
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO");
+		}
+
+		// ripulisco
+
+		automobileService.rimuovi(primaAutomobilePeppeVerdi);
+		automobileService.rimuovi(secondaAutomobilePeppeVerdi);
+		automobileService.rimuovi(primaAutomobileMimmoMammi);
+		automobileService.rimuovi(secondaAutomobileMimmoMammi);
+		automobileService.rimuovi(primaAutomobileLucaGialli);
+		automobileService.rimuovi(secondaAutomobileLucaGialli);
+
+		boolean autoRimosseDiPeppeVerdi = (primaAutomobilePeppeVerdi.getId() == null
+				&& secondaAutomobilePeppeVerdi.getId() == null);
+
+		boolean autoRimosseDiMimmoMammi = (primaAutomobileMimmoMammi.getId() == null
+				&& secondaAutomobileMimmoMammi.getId() == null);
+
+		boolean autoRimosseDiLucaGialli = (primaAutomobileLucaGialli.getId() == null
+				&& secondaAutomobileLucaGialli.getId() == null);
+
+		if (!autoRimosseDiPeppeVerdi || !autoRimosseDiMimmoMammi || !autoRimosseDiLucaGialli) {
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO");
+		}
+
+		proprietarioService.rimuovi(nuovoProprietarioLucaGialli);
+		proprietarioService.rimuovi(nuovoProprietarioMimmoMammi);
+		proprietarioService.rimuovi(nuovoProprietarioPeppeVerdi);
+
+		if (nuovoProprietarioLucaGialli.getId() != null || nuovoProprietarioMimmoMammi.getId() != null
+				|| nuovoProprietarioPeppeVerdi.getId() != null) {
+			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO");
+		}
+		System.out.println(".......testCountProprietariWithAutomobileImmatricolataDopo fine: PASSED.............");
+	}
+
+	private static void testFindAllProprietariCodFisIniziaPer(ProprietarioService proprietarioService,
+			AutomobileService automobileService) throws Exception {
+		System.out.println(".......testFindAllProprietariCodFisIniziaPer inizio.............");
+
+		// istanzio 3 proprietari
+		Date dataDiNascitaProprietarioPeppeVerdi = new SimpleDateFormat("dd-MM-yyyy").parse("02-10-1995");
+		Proprietario nuovoProprietarioPeppeVerdi = new Proprietario("Peppe", "Verdi", "popopopo",
+				dataDiNascitaProprietarioPeppeVerdi);
+
+		Date dataDiNascitaProprietarioMimmoMammi = new SimpleDateFormat("dd-MM-yyyy").parse("15-05-1993");
+		Proprietario nuovoProprietarioMimmoMammi = new Proprietario("Mimmo", "Mammi", "popopopo",
+				dataDiNascitaProprietarioMimmoMammi);
+
+		Date dataDiNascitaProprietarioLucaGialli = new SimpleDateFormat("dd-MM-yyyy").parse("30-11-1979");
+		Proprietario nuovoProprietarioLucaGialli = new Proprietario("Luca", "Gialli", "popopopo",
+				dataDiNascitaProprietarioLucaGialli);
+
+		proprietarioService.inserisciNuovo(nuovoProprietarioPeppeVerdi);
+		proprietarioService.inserisciNuovo(nuovoProprietarioMimmoMammi);
+		proprietarioService.inserisciNuovo(nuovoProprietarioLucaGialli);
+
+		if (nuovoProprietarioLucaGialli.getId() == null || nuovoProprietarioMimmoMammi.getId() == null
+				|| nuovoProprietarioPeppeVerdi.getId() == null) {
+			throw new RuntimeException("testFindAllProprietariCodFisIniziaPer FALLITO: record già presente ");
+		}
+
+		Automobile primaAutomobileLucaGialli = new Automobile("Fiat", "Idea", "KM123MK", 2021);
+		Automobile secondaAutomobileLucaGialli = new Automobile("Fiat", "500X", "LG444GL", 2022);
+
+		primaAutomobileLucaGialli.setProprietario(nuovoProprietarioLucaGialli);
+		secondaAutomobileLucaGialli.setProprietario(nuovoProprietarioLucaGialli);
+
+		automobileService.inserisciNuovo(primaAutomobileLucaGialli);
+		automobileService.inserisciNuovo(secondaAutomobileLucaGialli);
+
+		if (primaAutomobileLucaGialli.getId() == null || secondaAutomobileLucaGialli.getId() == null)
+			throw new RuntimeException("testFindAllProprietariCodFisIniziaPer FALLITO ");
+
+		Automobile primaAutomobileMimmoMammi = new Automobile("Fiat", "Idea", "KM123MK", 2010);
+		Automobile secondaAutomobileMimmoMammi = new Automobile("Fiat", "500X", "LG444GL", 2012);
+
+		primaAutomobileMimmoMammi.setProprietario(nuovoProprietarioMimmoMammi);
+		secondaAutomobileMimmoMammi.setProprietario(nuovoProprietarioMimmoMammi);
+
+		automobileService.inserisciNuovo(primaAutomobileMimmoMammi);
+		automobileService.inserisciNuovo(secondaAutomobileMimmoMammi);
+
+		if (primaAutomobileMimmoMammi.getId() == null || secondaAutomobileMimmoMammi.getId() == null)
+			throw new RuntimeException("testFindAllProprietariCodFisIniziaPer FALLITO ");
+
+		Automobile primaAutomobilePeppeVerdi = new Automobile("Fiat", "Idea", "KM123MK", 2025);
+		Automobile secondaAutomobilePeppeVerdi = new Automobile("Fiat", "500X", "LG444GL", 2026);
+
+		primaAutomobilePeppeVerdi.setProprietario(nuovoProprietarioPeppeVerdi);
+		secondaAutomobilePeppeVerdi.setProprietario(nuovoProprietarioPeppeVerdi);
+
+		automobileService.inserisciNuovo(primaAutomobilePeppeVerdi);
+		automobileService.inserisciNuovo(secondaAutomobilePeppeVerdi);
+
+		if (primaAutomobilePeppeVerdi.getId() == null || secondaAutomobilePeppeVerdi.getId() == null)
+			throw new RuntimeException("testFindAllProprietariCodFisIniziaPer FALLITO ");
+
+		List<Automobile> automobiliProprietarioCodFisStartsWithPopopopo = automobileService
+				.listAllAutomobiliConCodFisProprietarioCheIniziaPer("popopopo");
+
+		for (Automobile automobiliProprietarioCodFisStartsWithPopopopoItem : automobiliProprietarioCodFisStartsWithPopopopo) {
+			if (!automobiliProprietarioCodFisStartsWithPopopopoItem.getProprietario().getCodiceFiscale()
+					.startsWith("popopopo")) {
+				throw new RuntimeException("testFindAllProprietariCodFisIniziaPer FALLITO");
+			}
+		}
+		// ripulisco
+
+		automobileService.rimuovi(primaAutomobilePeppeVerdi);
+		automobileService.rimuovi(secondaAutomobilePeppeVerdi);
+		automobileService.rimuovi(primaAutomobileMimmoMammi);
+		automobileService.rimuovi(secondaAutomobileMimmoMammi);
+		automobileService.rimuovi(primaAutomobileLucaGialli);
+		automobileService.rimuovi(secondaAutomobileLucaGialli);
+
+		proprietarioService.rimuovi(nuovoProprietarioLucaGialli);
+		proprietarioService.rimuovi(nuovoProprietarioMimmoMammi);
+		proprietarioService.rimuovi(nuovoProprietarioPeppeVerdi);
+
+		System.out.println(".......testFindAllProprietariCodFisIniziaPer fine: PASSED.............");
 	}
 }
