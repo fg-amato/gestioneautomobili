@@ -1,5 +1,6 @@
 package it.gestioneautomobili.test;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -28,12 +29,21 @@ public class TestGestioneAutomobili {
 			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
 					+ " elementi.");
 
+			testRimozioneProprietario(proprietarioService);
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
+
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
 			testInserisciAutomobile(proprietarioService, automobileService);
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
+			testRimozioneAutomobile(proprietarioService, automobileService);
+			System.out.println(
+					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
@@ -97,18 +107,43 @@ public class TestGestioneAutomobili {
 		if (listaProprietariPresenti.isEmpty())
 			throw new RuntimeException("testRimozioneAutomobile FALLITO: non ci sono proprietari a cui collegarci ");
 
-		Automobile nuovaAutomobile = new Automobile(/* daRiempire */);
+		Automobile automobileDaRimuovere = new Automobile("Nissan", "Qashqai", "CC456BB", 2017);
 		// lo lego al primo proprietario che trovo
-		nuovaAutomobile.setProprietario(listaProprietariPresenti.get(0));
+		automobileDaRimuovere.setProprietario(listaProprietariPresenti.get(0));
 
 		// salvo il nuovo abitante
-		automobileService.inserisciNuovo(nuovaAutomobile);
+		automobileService.inserisciNuovo(automobileDaRimuovere);
 
-		Long idAutomobileInserita = nuovaAutomobile.getId();
+		Long idAutomobileInserita = automobileDaRimuovere.getId();
 		automobileService.rimuovi(automobileService.caricaSingoloAutomobile(idAutomobileInserita));
 		// proviamo a vedere se è stato rimosso
 		if (automobileService.caricaSingoloAutomobile(idAutomobileInserita) != null)
 			throw new RuntimeException("testRimozioneAutomobile FALLITO: record non cancellato ");
 		System.out.println(".......testRimozioneAutomobile fine: PASSED.............");
+	}
+
+	private static void testRimozioneProprietario(ProprietarioService proprietarioService) throws Exception {
+		System.out.println(".......testRimozioneProprietario inizio.............");
+		// creo nuovo proprietario
+		Date dataDiNascitaProprietarioGiovanniNeri = new SimpleDateFormat("dd-MM-yyyy").parse("15-02-1985");
+		Proprietario nuovoProprietarioGiovanniNeri = new Proprietario("Giovanni", "Neri", "NRIGVN85FIS",
+				dataDiNascitaProprietarioGiovanniNeri);
+		if (nuovoProprietarioGiovanniNeri.getId() != null)
+			throw new RuntimeException("testRimozioneProprietario FALLITO: record già presente ");
+
+		// salvo
+		proprietarioService.inserisciNuovo(nuovoProprietarioGiovanniNeri);
+
+		if (nuovoProprietarioGiovanniNeri.getId() == null)
+			throw new RuntimeException("testRimozioneProprietario FALLITO ");
+
+		Long idGiovanniNeriProprietario = nuovoProprietarioGiovanniNeri.getId();
+
+		proprietarioService.rimuovi(proprietarioService.caricaSingoloProprietario(idGiovanniNeriProprietario));
+
+		if (proprietarioService.caricaSingoloProprietario(idGiovanniNeriProprietario) != null)
+			throw new RuntimeException("testRimozioneProprietario FALLITO: record non cancellato ");
+
+		System.out.println(".......testRimozioneProprietario fine: PASSED.............");
 	}
 }
