@@ -54,12 +54,12 @@ public class AutomobileDAOImpl implements AutomobileDAO {
 	}
 
 	@Override
-	public int countProprietariConAutomobileImmatricolataDopo(int annoDiImmatricolazioneInput) {
-//		TypedQuery<Automobile> query = entityManager.createQuery(
-//				"select count(a.proprietario.id), a from Automobile a where a.annoImmatricolazione > ?1",
-//				Automobile.class);
-//		return query.setParameter(1, annoDiImmatricolazioneInput).getResultList();
-		return -1;
+	public Long countProprietariConAutomobileImmatricolataDopo(int annoDiImmatricolazioneInput) {
+		TypedQuery<Long> query = entityManager.createQuery(
+				"select count(distinct a.proprietario.id) from Automobile a where a.annoImmatricolazione > ?1",
+				Long.class);
+
+		return query.setParameter(1, annoDiImmatricolazioneInput).getSingleResult();
 	}
 
 	@Override

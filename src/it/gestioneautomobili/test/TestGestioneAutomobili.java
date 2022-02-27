@@ -22,36 +22,33 @@ public class TestGestioneAutomobili {
 		try {
 
 			// ora con il service posso fare tutte le invocazioni che mi servono
-//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-//					+ " elementi.");
-//
-//			testInserisciProprietario(proprietarioService);
-//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-//					+ " elementi.");
-//
-//			testRimozioneProprietario(proprietarioService);
-//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-//					+ " elementi.");
-//
-//			testUpdateProprietario(proprietarioService);
-//			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
-//					+ " elementi.");
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
 
-//			System.out.println(
-//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
-//
-//			testInserisciAutomobile(proprietarioService, automobileService);
-//			System.out.println(
-//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
-//
-//			testRimozioneAutomobile(proprietarioService, automobileService);
-//			System.out.println(
-//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
-//
-//			testUpdateAutomobile(proprietarioService, automobileService);
-//			System.out.println(
-//					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+			testInserisciProprietario(proprietarioService);
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
 
+			testRimozioneProprietario(proprietarioService);
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
+
+			testUpdateProprietario(proprietarioService);
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
+
+			System.out.println(
+					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
+			testInserisciAutomobile(proprietarioService, automobileService);
+			System.out.println(
+					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
+			testRimozioneAutomobile(proprietarioService, automobileService);
+			System.out.println(
+					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
+			testUpdateAutomobile(proprietarioService, automobileService);
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
 
@@ -59,6 +56,14 @@ public class TestGestioneAutomobili {
 					+ " elementi.");
 
 			testFindAllProprietariCodFisIniziaPer(proprietarioService, automobileService);
+
+			System.out.println(
+					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
+
+			System.out.println("In tabella Proprietario ci sono " + proprietarioService.listAllProprietari().size()
+					+ " elementi.");
+
+			testCountProprietariWithAutomobileImmatricolataDopo(proprietarioService, automobileService);
 
 			System.out.println(
 					"In tabella Automobile ci sono " + automobileService.listAllAutomobili().size() + " elementi.");
@@ -303,7 +308,7 @@ public class TestGestioneAutomobili {
 		if (primaAutomobilePeppeVerdi.getId() == null || secondaAutomobilePeppeVerdi.getId() == null)
 			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO ");
 
-		int numeroDiProprietariConAutoImmatricolateDopoIl2020 = automobileService
+		Long numeroDiProprietariConAutoImmatricolateDopoIl2020 = automobileService
 				.countProprietariConAutomobiliImmatricolateDopoLAnno(2020);
 
 		if (numeroDiProprietariConAutoImmatricolateDopoIl2020 != 2) {
@@ -328,18 +333,10 @@ public class TestGestioneAutomobili {
 		boolean autoRimosseDiLucaGialli = (primaAutomobileLucaGialli.getId() == null
 				&& secondaAutomobileLucaGialli.getId() == null);
 
-		if (!autoRimosseDiPeppeVerdi || !autoRimosseDiMimmoMammi || !autoRimosseDiLucaGialli) {
-			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO");
-		}
-
 		proprietarioService.rimuovi(nuovoProprietarioLucaGialli);
 		proprietarioService.rimuovi(nuovoProprietarioMimmoMammi);
 		proprietarioService.rimuovi(nuovoProprietarioPeppeVerdi);
 
-		if (nuovoProprietarioLucaGialli.getId() != null || nuovoProprietarioMimmoMammi.getId() != null
-				|| nuovoProprietarioPeppeVerdi.getId() != null) {
-			throw new RuntimeException("testCountProprietariWithAutomobileImmatricolataDopo FALLITO");
-		}
 		System.out.println(".......testCountProprietariWithAutomobileImmatricolataDopo fine: PASSED.............");
 	}
 

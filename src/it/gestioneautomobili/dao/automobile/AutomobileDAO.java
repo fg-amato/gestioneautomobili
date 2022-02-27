@@ -7,7 +7,7 @@ import it.gestioneautomobili.model.Automobile;
 
 public interface AutomobileDAO extends IBaseDAO<Automobile> {
 
-	public int countProprietariConAutomobileImmatricolataDopo(int annoDiImmatricolazioneInput);
+	public Long countProprietariConAutomobileImmatricolataDopo(int annoDiImmatricolazioneInput);
 
 	public List<Automobile> findAllByCodFisProprietarioStartsWith(String inizialiInput);
 }

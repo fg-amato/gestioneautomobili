@@ -127,7 +127,7 @@ public class AutomobileServiceImpl implements AutomobileService {
 	}
 
 	@Override
-	public int countProprietariConAutomobiliImmatricolateDopoLAnno(int annoDiImmatricolazioneInput) throws Exception {
+	public Long countProprietariConAutomobiliImmatricolateDopoLAnno(int annoDiImmatricolazioneInput) throws Exception {
 		EntityManager entityManager = EntityManagerUtil.getEntityManager();
 
 		try {
